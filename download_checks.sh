@@ -1,4 +1,5 @@
-{'https://s3.amazonaws.com/fast-ai-coco/coco_sample.tgz': (3245877008,
+{
+'https://s3.amazonaws.com/fast-ai-coco/coco_sample.tgz': (3245877008,
                                                            '006cd55d633d94b36ecaf661467830ec'),
  'https://s3.amazonaws.com/fast-ai-coco/coco_tiny.tgz': (801038,
                                                          '367467451ac4fba79a647753c2c66d3a'),
