@@ -1,0 +1,25 @@
+type Gettexter interface {
+	FileSystem() FileSystem
+
+	GetDomain() string
+	SetDomain(domain string) Gettexter
+
+	GetLanguage() string
+	SetLanguage(lang string) Gettexter
+
+	Gettext(msgid string) string
+	PGettext(msgctxt, msgid string) string
+
+	NGettext(msgid, msgidPlural string, n int) string
+	PNGettext(msgctxt, msgid, msgidPlural string, n int) string
+
+	DGettext(domain, msgid string) string
+	DPGettext(domain, msgctxt, msgid string) string
+	DNGettext(domain, msgid, msgidPlural string, n int) string
+	DPNGettext(domain, msgctxt, msgid, msgidPlural string, n int) string
+
+	Getdata(name string) []byte
+	DGetdata(domain, name string) []byte
+}
+
+func New(domain, path string, data ...interface{}) Gettexter
