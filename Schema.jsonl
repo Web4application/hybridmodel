@@ -1,0 +1,68 @@
+{
+  "safe_text": [
+    "text/plain",
+    "text/markdown",
+    "text/html",
+    "text/css"
+  ],
+
+  "structured_data": [
+    "application/json",
+    "application/xml",
+    "text/xml",
+    "application/x-yaml",
+    "application/toml"
+  ],
+
+  "documents": [
+    "application/pdf",
+    "application/msword",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "application/vnd.ms-powerpoint",
+    "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+    "application/vnd.oasis.opendocument.text",
+    "application/rtf",
+    "text/rtf"
+  ],
+
+  "code": [
+    "text/javascript",
+    "application/javascript",
+    "text/x-python",
+    "text/x-java",
+    "text/x-c",
+    "text/x-c++",
+    "text/x-csharp",
+    "text/x-go",
+    "text/x-rust",
+    "text/x-kotlin",
+    "text/x-swift",
+    "text/x-php",
+    "text/x-ruby",
+    "text/x-shellscript",
+    "text/x-typescript",
+    "text/tsx",
+    "text/jsx"
+  ],
+
+  "templates": [
+    "text/x-handlebars",
+    "text/x-mustache",
+    "text/x-jinja2",
+    "text/x-ejs",
+    "text/x-pug",
+    "text/x-liquid"
+  ],
+
+  "config_files": [
+    "text/x-makefile",
+    "application/x-sql"
+  ],
+
+  "images": [
+    "image/png",
+    "image/jpeg",
+    "image/webp",
+    "image/gif"
+  ]
+}
