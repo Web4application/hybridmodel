@@ -1,37 +1,188 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <script type="importmap">
-      {
-        "imports": {
-          "preact": "https://unpkg.com/preact@10.25.4/dist/preact.module.js",
-          "preact/hooks": "https://unpkg.com/preact@10.25.4/hooks/dist/hooks.module.js",
-          "htm": "https://unpkg.com/htm@3.1.1/dist/htm.module.js"
-        }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Blossom App</title>
+
+  <script type="importmap">
+    {
+      "imports": {
+        "preact": "https://unpkg.com/preact@10.25.4/dist/preact.module.js",
+        "preact/hooks": "https://unpkg.com/preact@10.25.4/hooks/dist/hooks.module.js",
+        "htm": "https://unpkg.com/htm@3.1.1/dist/htm.module.js"
       }
-    </script>
-  </head>
-  <body>
-    <script type="module">
-      import { h, render } from "preact";
-      import { useState } from "preact/hooks";
-      import htm from "htm";
+    }
+  </script>
 
-      const html = htm.bind(h);
+  <style>
+    body {
+      margin: 0;
+      font-family: system-ui;
+      background: #0b1020;
+      color: white;
+      display: grid;
+      place-items: center;
+      height: 100vh;
+    }
 
-      function App() {
-        let [count, setCount] = useState(0);
+    .app {
+      width: 320px;
+      padding: 20px;
+      border-radius: 16px;
+      background: #111827;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
 
-        return html`
-          <div>
-            <p>Count: ${count}</p>
-            <button onClick=${() => setCount(count + 1)}>Increment</button>
-          </div>
-        `;
-      }
+    nav {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
 
-      render(html`<${App} />`, document.body);
-    </script>
-  </body>
+    a {
+      color: #9ca3af;
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    a.active {
+      color: #22c55e;
+    }
+
+    button {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      margin: 5px;
+    }
+
+    .count {
+      font-size: 40px;
+      color: #22c55e;
+    }
+  </style>
+</head>
+
+<body>
+<script type="module">
+import { h, render, createContext } from "preact";
+import { useContext, useReducer, useEffect, useState } from "preact/hooks";
+import htm from "htm";
+
+const html = htm.bind(h);
+
+/* -------------------- STATE LAYER -------------------- */
+
+const initialState = {
+  count: Number(localStorage.getItem("count") || 0)
+};
+
+function reducer(state, action) {
+  switch (action.type) {
+    case "inc":
+      return { ...state, count: state.count + 1 };
+    case "dec":
+      return { ...state, count: state.count - 1 };
+    case "reset":
+      return { ...state, count: 0 };
+    default:
+      return state;
+  }
+}
+
+const Store = createContext();
+
+function Provider({ children }) {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
+  useEffect(() => {
+    localStorage.setItem("count", state.count);
+  }, [state.count]);
+
+  return html`
+    <${Store.Provider} value=${{ state, dispatch }}>
+      ${children}
+    <//>
+  `;
+}
+
+function useStore() {
+  return useContext(Store);
+}
+
+/* -------------------- ROUTER -------------------- */
+
+function useRoute() {
+  const [route, setRoute] = useState(location.hash || "#/");
+
+  useEffect(() => {
+    const onHash = () => setRoute(location.hash || "#/");
+    window.addEventListener("hashchange", onHash);
+    return () => window.removeEventListener("hashchange", onHash);
+  }, []);
+
+  return route;
+}
+
+/* -------------------- PAGES -------------------- */
+
+function Home() {
+  const { state, dispatch } = useStore();
+
+  return html`
+    <div>
+      <div class="count">${state.count}</div>
+
+      <button onClick=${() => dispatch({ type: "inc" })}>+</button>
+      <button onClick=${() => dispatch({ type: "dec" })}>-</button>
+      <button onClick=${() => dispatch({ type: "reset" })}>reset</button>
+    </div>
+  `;
+}
+
+function About() {
+  return html`
+    <div>
+      <h3>About</h3>
+      <p>Minimal Preact micro-app. No build step. Pure browser runtime architecture.</p>
+    </div>
+  `;
+}
+
+/* -------------------- APP -------------------- */
+
+function App() {
+  const route = useRoute();
+
+  const page =
+    route === "#/about"
+      ? html`<${About} />`
+      : html`<${Home} />`;
+
+  return html`
+    <div class="app">
+      <nav>
+        <a href="#/" class=${route === "#/" ? "active" : ""}>Home</a>
+        <a href="#/about" class=${route === "#/about" ? "active" : ""}>About</a>
+      </nav>
+
+      ${page}
+    </div>
+  `;
+}
+
+/* -------------------- BOOT -------------------- */
+
+render(
+  html`
+    <${Provider}>
+      <${App} />
+    <//>
+  `,
+  document.body
+);
+</script>
+</body>
 </html>
