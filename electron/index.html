@@ -2,6 +2,9 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blossom Counter</title>
+
     <script type="importmap">
       {
         "imports": {
@@ -11,24 +14,107 @@
         }
       }
     </script>
+
+    <style>
+      :root {
+        --bg: #0f172a;
+        --card: #111827;
+        --accent: #22c55e;
+        --text: #e5e7eb;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        font-family: system-ui, sans-serif;
+      }
+
+      body {
+        background: linear-gradient(135deg, #0f172a, #020617);
+        color: var(--text);
+        display: grid;
+        place-items: center;
+        height: 100vh;
+      }
+
+      .card {
+        background: var(--card);
+        padding: 2rem;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        text-align: center;
+        min-width: 260px;
+      }
+
+      .count {
+        font-size: 3rem;
+        margin: 1rem 0;
+        color: var(--accent);
+      }
+
+      button {
+        background: var(--accent);
+        border: none;
+        padding: 0.7rem 1.2rem;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: transform 0.1s ease, opacity 0.2s;
+      }
+
+      button:hover {
+        opacity: 0.9;
+      }
+
+      button:active {
+        transform: scale(0.95);
+      }
+
+      .actions {
+        display: flex;
+        gap: 0.5rem;
+        justify-content: center;
+        margin-top: 1rem;
+      }
+    </style>
   </head>
+
   <body>
     <script type="module">
       import { h, render } from "preact";
-      import { useState } from "preact/hooks";
+      import { useState, useEffect } from "preact/hooks";
       import htm from "htm";
 
       const html = htm.bind(h);
 
-      function App() {
-        let [count, setCount] = useState(0);
+      function Counter() {
+        const [count, setCount] = useState(0);
+
+        // subtle lifecycle flavor
+        useEffect(() => {
+          document.title = `Count: ${count}`;
+        }, [count]);
+
+        const increment = () => setCount(c => c + 1);
+        const decrement = () => setCount(c => c - 1);
+        const reset = () => setCount(0);
 
         return html`
-          <div>
-            <p>Count: ${count}</p>
-            <button onClick=${() => setCount(count + 1)}>Increment</button>
+          <div class="card">
+            <h2>Blossom Counter 🌱</h2>
+            <div class="count">${count}</div>
+
+            <div class="actions">
+              <button onClick=${decrement}>−</button>
+              <button onClick=${increment}>+</button>
+              <button onClick=${reset}>Reset</button>
+            </div>
           </div>
         `;
+      }
+
+      function App() {
+        return html`<${Counter} />`;
       }
 
       render(html`<${App} />`, document.body);
