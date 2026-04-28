@@ -1,8 +1,8 @@
 export const blocks = [
-  // ...
+  // ... 
   {
     name: "web4",
-    author: "kubulee (https://ui.shadcn.com)",
+    author: "seriki yakub" (https://ui.shadcn.com)",
     title: "Dashboard",
     description: "web4 intelligent interface.",
     type: "registry:block",
